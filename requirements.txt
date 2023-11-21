@@ -1,0 +1,5 @@
+gunicorn==20.1.0
+Flask>=2.2.2
+mysql-connector-python
+pandas
+load_dotenv
