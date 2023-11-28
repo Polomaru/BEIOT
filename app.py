@@ -90,7 +90,11 @@ def create_id() :
     new_id = Dbconn.execute_fetch_query(query= query)[0][0] + 1
     insert_query = f"INSERT INTO {table} (`id`) VALUES ({new_id})"
     Dbconn.execute_query(query= insert_query)    
-    return build_reponse(200, "id created")
+    body = {
+        "id" : new_id,
+        "sensor_type" : sensor_type
+    }
+    return build_reponse(200, body = body)
 
 
 def dht11_query(id, data):
