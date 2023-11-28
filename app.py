@@ -84,14 +84,11 @@ def get_id():
 
 @app.route('/create_id', methods=['POST'])
 def create_id() :
-    id = request.args.get('id')
-    sensor_type = request.args.get('sensor_type', None)
+    sensor_type  = request.args.get('sensor_type')
     table =  "actuator"  if sensor_type is  None else f"data_{sensor_type}"
-    insert_query = f"INSERT INTO {table} (`id`) VALUES ({id})"
-    query =  f"SELECT id FROM {table} WHERE `id` = {id}"
-
-    if id_exist(id, sensor_type) : return build_reponse(500, "id alredy exist")
-    print(insert_query)
+    query =  f"SELECT max(id) FROM {table} "
+    new_id = Dbconn.execute_fetch_query(query= query)[0][0] + 1
+    insert_query = f"INSERT INTO {table} (`id`) VALUES ({new_id})"
     Dbconn.execute_query(query= insert_query)    
     return build_reponse(200, "id created")
 
