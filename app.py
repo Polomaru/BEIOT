@@ -140,11 +140,13 @@ def check_actuator_event(id : str, sensor_type : str, data : dict) -> list :
 
 @app.route('/register_data', methods=['POST'])
 def register_data() :
-    id = request.args.get('id')
-    sensor_type = request.args.get('sensor_type')
-    data = request.args.get('data')
+    tp = request.get_data()
+    tp= json.loads(tp)
 
-    data= json.loads(data)
+    id = tp['id']
+    sensor_type = tp['sensor_type']
+    data = tp['data']
+
     if not Dbconn.table_exists(f"data_{sensor_type}") : return build_reponse(500,  "device type not supported")
     if not id_exist(id, sensor_type): return build_reponse(500, "id does not exist")
     query = query_constructors[sensor_type](id, data)
